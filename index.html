@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Security Headers for GitHub Pages -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https:;">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Presentation Access</title>
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
+        }
+        h1 { color: #333; margin-bottom: 0.5rem; text-align: center; }
+        p { color: #666; text-align: center; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            width: 100%;
+            padding: 0.875rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover { transform: translateY(-2px); }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: #fee;
+            border-radius: 6px;
+            display: none;
+        }
+        .security-notice {
+            text-align: center;
+            color: #999;
+            font-size: 0.875rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e1e8ed;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>🔒 Secure Access Required</h1>
+        <p>Please enter the access code to view this presentation</p>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="password">Access Code</label>
+                <input type="password" id="password" 
+                       placeholder="Enter secure access code" 
+                       autocomplete="off"
+                       autofocus required>
+            </div>
+            <button type="submit">Access Presentation</button>
+        </form>
+        
+        <div id="error" class="error">Invalid access code. Please try again.</div>
+        
+        <div class="security-notice">
+            🛡️ This presentation is protected with enhanced security
+        </div>
+    </div>
+    
+    <script>
+        // Security configuration
+        const CORRECT_PASSWORD_HASH = '1401e1d1887d19d2eb90df0b677ee4b8eb928a7f23b6822cbd29b653372e9f1b';
+        const PRESENTATION_URL = 'platform.html';
+        const MAX_ATTEMPTS = 5;
+        const LOCKOUT_TIME = 300000; // 5 minutes
+        
+        // Hash function
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+        
+        // Fingerprint generation
+        function generateFingerprint() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Arial';
+            ctx.fillText('fp', 2, 2);
+            return canvas.toDataURL().slice(-50);
+        }
+        
+        // Rate limiting
+        function checkRateLimit() {
+            const attempts = parseInt(localStorage.getItem('loginAttempts') || '0');
+            const lockoutUntil = parseInt(localStorage.getItem('lockoutUntil') || '0');
+            const now = Date.now();
+            
+            if (lockoutUntil > now) {
+                const remaining = Math.ceil((lockoutUntil - now) / 1000);
+                showError(`Too many attempts. Try again in ${remaining} seconds.`);
+                return false;
+            }
+            
+            if (attempts >= MAX_ATTEMPTS) {
+                localStorage.setItem('lockoutUntil', (now + LOCKOUT_TIME).toString());
+                localStorage.setItem('loginAttempts', '0');
+                showError('Too many attempts. Please wait 5 minutes.');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function incrementAttempts() {
+            const attempts = parseInt(localStorage.getItem('loginAttempts') || '0');
+            localStorage.setItem('loginAttempts', (attempts + 1).toString());
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!checkRateLimit()) return;
+            
+            const password = document.getElementById('password').value;
+            const passwordHash = await sha256(password);
+            
+            if (passwordHash === CORRECT_PASSWORD_HASH) {
+                // Success - store auth data
+                sessionStorage.setItem('authenticated', 'true');
+                sessionStorage.setItem('authTime', Date.now().toString());
+                sessionStorage.setItem('fingerprint', generateFingerprint());
+                localStorage.setItem('loginAttempts', '0');
+                
+                // Redirect to presentation
+                window.location.href = PRESENTATION_URL;
+            } else {
+                // Failed attempt
+                incrementAttempts();
+                showError('Invalid access code. Please try again.');
+                document.getElementById('password').value = '';
+            }
+        });
+        
+        // Clear error on input focus
+        document.getElementById('password').addEventListener('focus', function() {
+            document.getElementById('error').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

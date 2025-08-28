@@ -1,209 +1,1391 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Security Headers for GitHub Pages -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
-    <!-- Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https:;">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Presentation Access</title>
-    <!-- Security Headers -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Claude BPMN Platform - Next-Gen Process Automation</title>
+    <link rel="stylesheet" href="https://unpkg.com/bpmn-js@17.0.0/dist/assets/diagram-js.css">
+    <link rel="stylesheet" href="https://unpkg.com/bpmn-js@17.0.0/dist/assets/bpmn-js.css">
+    <link rel="stylesheet" href="https://unpkg.com/bpmn-js@17.0.0/dist/assets/bpmn-font/css/bpmn.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .cosmos-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #000428, #004e92);
+            z-index: -2;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        /* Neural Network Animation */
+        .neural-network {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .neural-node {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        .neural-connection {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            transform-origin: left center;
+            animation: flow 3s linear infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+
+        @keyframes flow {
+            0% { background-position: -100% 0; }
+            100% { background-position: 100% 0; }
+        }
+
+        /* Hero Section */
+        .hero {
             min-height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
         }
-        .login-container {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            max-width: 400px;
-            width: 90%;
+
+        .hero-content {
+            text-align: center;
+            max-width: 1200px;
+            padding: 2rem;
         }
-        h1 { color: #333; margin-bottom: 0.5rem; text-align: center; }
-        p { color: #666; text-align: center; margin-bottom: 2rem; }
-        .form-group { margin-bottom: 1.5rem; }
-        label {
-            display: block;
-            color: #333;
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.2); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 3rem;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transform: translateY(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.5rem;
+        }
+
+        /* Platform Section */
+        .platform-section {
+            min-height: 100vh;
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* BPMN Modeler Container */
+        .modeler-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 0 auto;
+            max-width: 1400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modeler-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .modeler-title {
+            font-size: 1.5rem;
+            color: var(--dark);
             font-weight: 600;
+        }
+
+        .modeler-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        #canvas {
+            height: 500px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+        }
+
+        /* Process Flow Visualization */
+        .process-flow {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .flow-node {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            position: relative;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .flow-node:hover {
+            transform: scale(1.1);
+            background: rgba(99, 102, 241, 0.2);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .flow-node.active {
+            animation: nodeActive 1s infinite;
+        }
+
+        @keyframes nodeActive {
+            0%, 100% { box-shadow: 0 0 20px var(--success); }
+            50% { box-shadow: 0 0 40px var(--success); }
+        }
+
+        .flow-icon {
+            font-size: 2rem;
             margin-bottom: 0.5rem;
         }
-        input {
+
+        .flow-label {
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .flow-arrow {
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .flow-arrow::after {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: -4px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid var(--secondary);
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+
+        /* Task Inbox */
+        .task-inbox {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            color: var(--dark);
+        }
+
+        .task-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .task-item {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .task-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.1);
+        }
+
+        .task-info h4 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 1rem;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .task-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-active {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        /* Form Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: var(--dark);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-input {
             width: 100%;
             padding: 0.75rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 6px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
             font-size: 1rem;
             transition: border-color 0.3s;
         }
-        input:focus {
+
+        .form-input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--primary);
         }
-        button {
-            width: 100%;
-            padding: 0.875rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
+
+        /* Live Console */
+        .console {
+            background: #1e293b;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 2rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            max-height: 300px;
+            overflow-y: auto;
         }
-        button:hover { transform: translateY(-2px); }
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+
+        .console-line {
+            margin: 0.5rem 0;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
         }
-        .error {
-            color: #e74c3c;
-            text-align: center;
-            margin-top: 1rem;
-            padding: 0.75rem;
-            background: #fee;
-            border-radius: 6px;
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .console-timestamp {
+            color: #64748b;
+        }
+
+        .console-success {
+            color: var(--success);
+        }
+
+        .console-info {
+            color: #60a5fa;
+        }
+
+        .console-warning {
+            color: var(--warning);
+        }
+
+        .console-error {
+            color: var(--danger);
+        }
+
+        /* Loading Animation */
+        .loader {
             display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2000;
         }
-        .security-notice {
+
+        .loader.active {
+            display: block;
+        }
+
+        .loader-circle {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5);
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.7);
+        }
+
+        /* Notification Toast */
+        .toast {
+            position: fixed;
+            top: 2rem;
+            right: -400px;
+            background: white;
+            color: var(--dark);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: right 0.3s;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            right: 2rem;
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+
+        .toast-success .toast-icon {
+            color: var(--success);
+        }
+
+        .toast-error .toast-icon {
+            color: var(--danger);
+        }
+
+        /* Architecture Diagram */
+        .architecture-diagram {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 3rem;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .arch-layer {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .arch-layer-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .arch-components {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .arch-component {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 10px;
+            padding: 1rem;
             text-align: center;
-            color: #999;
-            font-size: 0.875rem;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #e1e8ed;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .arch-component:hover {
+            background: rgba(99, 102, 241, 0.2);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .flow-container {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .flow-arrow {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h1>🔒 Secure Access Required</h1>
-        <p>Please enter the access code to view this presentation</p>
-        
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="password">Access Code</label>
-                <input type="password" id="password" 
-                       placeholder="Enter secure access code" 
-                       autocomplete="off"
-                       autofocus required>
+    <!-- Animated Background -->
+    <div class="cosmos-bg"></div>
+    <div class="stars" id="stars"></div>
+    <canvas class="neural-network" id="neural"></canvas>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Claude BPMN Platform</h1>
+            <p class="hero-subtitle">Next-Generation AI Process Automation with MTLS MCP</p>
+            
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat1">0</div>
+                    <div class="stat-label">Processes Automated</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat2">0ms</div>
+                    <div class="stat-label">Average Latency</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat3">0%</div>
+                    <div class="stat-label">AI Automation Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat4">0</div>
+                    <div class="stat-label">Active Agents</div>
+                </div>
             </div>
-            <button type="submit">Access Presentation</button>
-        </form>
+
+            <button class="btn btn-primary" onclick="scrollToModeler()" style="font-size: 1.2rem; padding: 1rem 2rem;">
+                Start Building →
+            </button>
+        </div>
+    </section>
+
+    <!-- Platform Section with BPMN Modeler -->
+    <section class="platform-section">
+        <h2 class="section-title">Visual Process Designer</h2>
         
-        <div id="error" class="error">Invalid access code. Please try again.</div>
-        
-        <div class="security-notice">
-            🛡️ This presentation is protected with enhanced security
+        <div class="modeler-container">
+            <div class="modeler-header">
+                <h3 class="modeler-title">Hello World Process - MCP Echo Service Demo</h3>
+                <div class="modeler-controls">
+                    <button class="btn btn-primary" onclick="createHelloWorld()">
+                        Create Hello World
+                    </button>
+                    <button class="btn btn-success" onclick="deployProcess()">
+                        Deploy Process
+                    </button>
+                    <button class="btn btn-warning" onclick="runProcess()">
+                        Run Demo
+                    </button>
+                </div>
+            </div>
+            
+            <div id="canvas"></div>
+            
+            <div class="console" id="console">
+                <div class="console-line">
+                    <span class="console-timestamp">[00:00:00]</span>
+                    <span class="console-info"> System ready. MTLS MCP connector initialized.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Process Flow Visualization -->
+        <div class="process-flow">
+            <h3 style="text-align: center; margin-bottom: 2rem;">Live Process Execution</h3>
+            <div class="flow-container">
+                <div class="flow-node" id="node-start">
+                    <div class="flow-icon">▶️</div>
+                    <div class="flow-label">Start</div>
+                </div>
+                <div class="flow-arrow" style="left: 150px;"></div>
+                
+                <div class="flow-node" id="node-service">
+                    <div class="flow-icon">🤖</div>
+                    <div class="flow-label">MCP Echo Service<br><small>MTLS Secured</small></div>
+                </div>
+                <div class="flow-arrow" style="left: 350px;"></div>
+                
+                <div class="flow-node" id="node-gateway">
+                    <div class="flow-icon">🔀</div>
+                    <div class="flow-label">Decision<br><small>Continue?</small></div>
+                </div>
+                <div class="flow-arrow" style="left: 550px;"></div>
+                
+                <div class="flow-node" id="node-user">
+                    <div class="flow-icon">👤</div>
+                    <div class="flow-label">User Task<br><small>Form Input</small></div>
+                </div>
+                <div class="flow-arrow" style="left: 750px;"></div>
+                
+                <div class="flow-node" id="node-end">
+                    <div class="flow-icon">✅</div>
+                    <div class="flow-label">Complete</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Architecture Diagram -->
+        <div class="architecture-diagram">
+            <h3 style="text-align: center; margin-bottom: 2rem;">System Architecture</h3>
+            
+            <div class="arch-layer">
+                <div class="arch-layer-title">Orchestration Layer</div>
+                <div class="arch-components">
+                    <div class="arch-component">BPMN Engine</div>
+                    <div class="arch-component">Process Parser</div>
+                    <div class="arch-component">Task Executor</div>
+                    <div class="arch-component">Coordinator Agent</div>
+                </div>
+            </div>
+            
+            <div class="arch-layer">
+                <div class="arch-layer-title">MCP Communication Layer (MTLS Secured)</div>
+                <div class="arch-components">
+                    <div class="arch-component">MTLS Handshake</div>
+                    <div class="arch-component">Certificate Manager</div>
+                    <div class="arch-component">Secure Channel</div>
+                    <div class="arch-component">Message Router</div>
+                </div>
+            </div>
+            
+            <div class="arch-layer">
+                <div class="arch-layer-title">Agent Services</div>
+                <div class="arch-components">
+                    <div class="arch-component">Echo Service</div>
+                    <div class="arch-component">Claude Agent</div>
+                    <div class="arch-component">Compliance Agent</div>
+                    <div class="arch-component">Audit Logger</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task Inbox -->
+        <div class="task-inbox">
+            <h3 style="color: var(--dark); margin-bottom: 1rem;">Task Inbox</h3>
+            <div class="task-list" id="taskList">
+                <div class="task-item">
+                    <div class="task-info">
+                        <h4>No active tasks</h4>
+                        <div class="task-meta">
+                            <span>Run the demo to see tasks appear here</span>
+                        </div>
+                    </div>
+                    <span class="task-status status-pending">Waiting</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Task Form Modal -->
+    <div class="modal" id="taskModal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 1.5rem;">Complete User Task</h3>
+            <form id="taskForm">
+                <div id="dynamicFields"></div>
+                
+                <div class="form-group">
+                    <label class="form-label">Additional Comments</label>
+                    <textarea class="form-input" rows="3" id="comments"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Approval Decision</label>
+                    <select class="form-input" id="decision">
+                        <option value="approve">Approve</option>
+                        <option value="reject">Reject</option>
+                        <option value="review">Need Review</option>
+                    </select>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn" onclick="closeModal()" style="background: #6b7280;">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        Complete Task
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast">
+        <span class="toast-icon">✓</span>
+        <div>
+            <div id="toastTitle">Success</div>
+            <div id="toastMessage" style="font-size: 0.9rem; opacity: 0.8;">Operation completed</div>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div class="loader" id="loader">
+        <div class="loader-circle"></div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab" onclick="showHelp()">?</div>
+
+    <!-- BPMN.js -->
+    <script src="https://unpkg.com/bpmn-js@17.0.0/dist/bpmn-modeler.production.min.js"></script>
     
     <script>
-        // Security configuration
-        const CORRECT_PASSWORD_HASH = '1401e1d1887d19d2eb90df0b677ee4b8eb928a7f23b6822cbd29b653372e9f1b';
-        const PRESENTATION_URL = 'platform.html';
-        const MAX_ATTEMPTS = 5;
-        const LOCKOUT_TIME = 300000; // 5 minutes
-        
-        // Hash function
-        async function sha256(message) {
-            const msgBuffer = new TextEncoder().encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        // Initialize stars background
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
         }
-        
-        // Fingerprint generation
-        function generateFingerprint() {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            ctx.textBaseline = 'top';
-            ctx.font = '14px Arial';
-            ctx.fillText('fp', 2, 2);
-            return canvas.toDataURL().slice(-50);
+        createStars();
+
+        // Neural Network Animation
+        const canvas = document.getElementById('neural');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const nodes = [];
+        const connections = [];
+
+        class Node {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = 3;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(99, 102, 241, 0.8)';
+                ctx.fill();
+            }
         }
-        
-        // Rate limiting
-        function checkRateLimit() {
-            const attempts = parseInt(localStorage.getItem('loginAttempts') || '0');
-            const lockoutUntil = parseInt(localStorage.getItem('lockoutUntil') || '0');
-            const now = Date.now();
+
+        // Create nodes
+        for (let i = 0; i < 50; i++) {
+            nodes.push(new Node(
+                Math.random() * canvas.width,
+                Math.random() * canvas.height
+            ));
+        }
+
+        function animateNeuralNetwork() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw connections
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const dx = nodes[i].x - nodes[j].x;
+                    const dy = nodes[i].y - nodes[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 150) {
+                        ctx.beginPath();
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.strokeStyle = `rgba(99, 102, 241, ${0.2 * (1 - distance / 150)})`;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // Update and draw nodes
+            nodes.forEach(node => {
+                node.update();
+                node.draw();
+            });
+
+            requestAnimationFrame(animateNeuralNetwork);
+        }
+        animateNeuralNetwork();
+
+        // Animate statistics
+        function animateValue(id, start, end, duration, suffix = '') {
+            const element = document.getElementById(id);
+            const range = end - start;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const value = Math.floor(start + range * progress);
+                element.textContent = value + suffix;
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        // Animate stats on load
+        setTimeout(() => {
+            animateValue('stat1', 0, 1247, 2000);
+            animateValue('stat2', 0, 87, 1500, 'ms');
+            animateValue('stat3', 0, 94, 1800, '%');
+            animateValue('stat4', 0, 23, 1600);
+        }, 500);
+
+        // Initialize BPMN Modeler
+        const modeler = new BpmnJS({
+            container: '#canvas',
+            keyboard: { bindTo: window }
+        });
+
+        // Hello World BPMN Process
+        const helloWorldBPMN = `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+    xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+    xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" 
+    xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+    xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+    id="sample-diagram" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn2:process id="HelloWorldProcess" name="Hello World Demo" isExecutable="true">
+    <bpmn2:startEvent id="StartEvent_1" name="Start">
+      <bpmn2:outgoing>Flow_1</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    
+    <bpmn2:serviceTask id="ServiceTask_1" name="MCP Echo Service" camunda:type="external" camunda:topic="mcp-echo">
+      <bpmn2:extensionElements>
+        <camunda:properties>
+          <camunda:property name="mcp.protocol" value="mtls" />
+          <camunda:property name="mcp.endpoint" value="echo-service" />
+          <camunda:property name="mcp.certificate" value="/certs/client.pem" />
+        </camunda:properties>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>Flow_1</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_2</bpmn2:outgoing>
+    </bpmn2:serviceTask>
+    
+    <bpmn2:exclusiveGateway id="Gateway_1" name="Continue?">
+      <bpmn2:incoming>Flow_2</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_3</bpmn2:outgoing>
+      <bpmn2:outgoing>Flow_4</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    
+    <bpmn2:userTask id="UserTask_1" name="Review Form" camunda:assignee="user">
+      <bpmn2:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="field1" label="Customer Name" type="string" defaultValue="" />
+          <camunda:formField id="field2" label="Order Amount" type="long" defaultValue="0" />
+          <camunda:formField id="field3" label="Priority" type="enum">
+            <camunda:value id="low" name="Low" />
+            <camunda:value id="medium" name="Medium" />
+            <camunda:value id="high" name="High" />
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>Flow_3</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_5</bpmn2:outgoing>
+    </bpmn2:userTask>
+    
+    <bpmn2:endEvent id="EndEvent_1" name="Success">
+      <bpmn2:incoming>Flow_5</bpmn2:incoming>
+    </bpmn2:endEvent>
+    
+    <bpmn2:endEvent id="EndEvent_2" name="Failed">
+      <bpmn2:incoming>Flow_4</bpmn2:incoming>
+    </bpmn2:endEvent>
+    
+    <bpmn2:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="ServiceTask_1" />
+    <bpmn2:sequenceFlow id="Flow_2" sourceRef="ServiceTask_1" targetRef="Gateway_1" />
+    <bpmn2:sequenceFlow id="Flow_3" name="Success" sourceRef="Gateway_1" targetRef="UserTask_1">
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">\${status == 'success'}</bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="Flow_4" name="Error" sourceRef="Gateway_1" targetRef="EndEvent_2">
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">\${status != 'success'}</bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="Flow_5" sourceRef="UserTask_1" targetRef="EndEvent_1" />
+  </bpmn2:process>
+  
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="HelloWorldProcess">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_ServiceTask_1" bpmnElement="ServiceTask_1">
+        <dc:Bounds x="250" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_Gateway_1" bpmnElement="Gateway_1" isMarkerVisible="true">
+        <dc:Bounds x="415" y="95" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_UserTask_1" bpmnElement="UserTask_1">
+        <dc:Bounds x="530" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_EndEvent_1" bpmnElement="EndEvent_1">
+        <dc:Bounds x="702" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_EndEvent_2" bpmnElement="EndEvent_2">
+        <dc:Bounds x="422" y="202" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_1" bpmnElement="Flow_1">
+        <di:waypoint x="188" y="120" />
+        <di:waypoint x="250" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_2" bpmnElement="Flow_2">
+        <di:waypoint x="350" y="120" />
+        <di:waypoint x="415" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_3" bpmnElement="Flow_3">
+        <di:waypoint x="465" y="120" />
+        <di:waypoint x="530" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_4" bpmnElement="Flow_4">
+        <di:waypoint x="440" y="145" />
+        <di:waypoint x="440" y="202" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_5" bpmnElement="Flow_5">
+        <di:waypoint x="630" y="120" />
+        <di:waypoint x="702" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>`;
+
+        // Load Hello World process
+        function createHelloWorld() {
+            addConsoleLog('Creating Hello World process with MCP Echo Service...', 'info');
+            modeler.importXML(helloWorldBPMN).then(() => {
+                addConsoleLog('✓ Process created: Start → MCP Echo Service → Decision → User Task → End', 'success');
+                showToast('Process Created', 'Hello World process ready for deployment', 'success');
+            });
+        }
+
+        // Deploy Process
+        function deployProcess() {
+            showLoader();
+            addConsoleLog('Deploying process to orchestrator...', 'info');
             
-            if (lockoutUntil > now) {
-                const remaining = Math.ceil((lockoutUntil - now) / 1000);
-                showError(`Too many attempts. Try again in ${remaining} seconds.`);
-                return false;
+            modeler.saveXML({ format: true }, function(err, xml) {
+                if (!err) {
+                    setTimeout(() => {
+                        addConsoleLog('✓ Process deployed successfully', 'success');
+                        addConsoleLog('✓ MTLS certificates validated', 'success');
+                        addConsoleLog('✓ MCP Echo Service endpoint registered', 'success');
+                        addConsoleLog('✓ Orchestrator agent ready', 'success');
+                        hideLoader();
+                        showToast('Deployment Success', 'Process deployed and ready to execute', 'success');
+                    }, 2000);
+                }
+            });
+        }
+
+        // Run Process Demo
+        let processRunning = false;
+        async function runProcess() {
+            if (processRunning) {
+                showToast('Process Running', 'A process is already executing', 'warning');
+                return;
+            }
+
+            processRunning = true;
+            showLoader();
+            resetFlowNodes();
+            
+            // Clear task list
+            document.getElementById('taskList').innerHTML = '';
+            
+            addConsoleLog('Starting process instance...', 'info');
+            
+            // Step 1: Start
+            await animateNode('node-start', 1000);
+            addConsoleLog('→ Process started', 'success');
+            
+            // Step 2: MCP Echo Service
+            await animateNode('node-service', 2000);
+            addConsoleLog('→ Establishing MTLS connection to MCP Echo Service...', 'info');
+            addConsoleLog('  Certificate: CN=orchestrator-agent', 'info');
+            addConsoleLog('  Endpoint: wss://mcp.platform.local/echo', 'info');
+            
+            // Simulate random success/failure (80% success rate)
+            const isSuccess = Math.random() > 0.2;
+            
+            if (isSuccess) {
+                addConsoleLog('✓ MCP Echo Service responded:', 'success');
+                addConsoleLog('  {"status": "success", "data": {"fields": 12, "timestamp": "' + new Date().toISOString() + '"}}', 'success');
+                
+                // Step 3: Decision Gateway
+                await animateNode('node-gateway', 1000);
+                addConsoleLog('→ Decision: Continue to User Task', 'info');
+                
+                // Step 4: Create User Task
+                await animateNode('node-user', 1000);
+                createUserTask();
+                addConsoleLog('→ User task created and assigned', 'info');
+                
+                hideLoader();
+                showToast('Task Created', 'A new task is waiting in your inbox', 'success');
+                
+            } else {
+                addConsoleLog('✗ MCP Echo Service error:', 'error');
+                addConsoleLog('  {"status": "error", "message": "Random failure for demo"}', 'error');
+                
+                // Step 3: Decision Gateway
+                await animateNode('node-gateway', 1000);
+                addConsoleLog('→ Decision: Process terminated due to error', 'warning');
+                
+                // Step 5: End with error
+                await animateNode('node-end', 1000);
+                addConsoleLog('✗ Process ended with error state', 'error');
+                
+                hideLoader();
+                showToast('Process Failed', 'Service returned an error', 'error');
             }
             
-            if (attempts >= MAX_ATTEMPTS) {
-                localStorage.setItem('lockoutUntil', (now + LOCKOUT_TIME).toString());
-                localStorage.setItem('loginAttempts', '0');
-                showError('Too many attempts. Please wait 5 minutes.');
-                return false;
-            }
+            processRunning = false;
+        }
+
+        function animateNode(nodeId, duration) {
+            return new Promise(resolve => {
+                const node = document.getElementById(nodeId);
+                node.classList.add('active');
+                setTimeout(() => {
+                    node.classList.remove('active');
+                    resolve();
+                }, duration);
+            });
+        }
+
+        function resetFlowNodes() {
+            const nodes = document.querySelectorAll('.flow-node');
+            nodes.forEach(node => node.classList.remove('active'));
+        }
+
+        // Create User Task
+        function createUserTask() {
+            const taskList = document.getElementById('taskList');
+            const taskId = 'TASK-' + Math.random().toString(36).substr(2, 9).toUpperCase();
             
-            return true;
+            const taskHtml = `
+                <div class="task-item" id="${taskId}">
+                    <div class="task-info">
+                        <h4>Review Process Data</h4>
+                        <div class="task-meta">
+                            <span>ID: ${taskId}</span>
+                            <span>Assigned: You</span>
+                            <span>Created: ${new Date().toLocaleTimeString()}</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <span class="task-status status-active">Active</span>
+                        <button class="btn btn-primary" onclick="openTask('${taskId}')">
+                            Open Task
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            taskList.innerHTML = taskHtml;
         }
-        
-        function incrementAttempts() {
-            const attempts = parseInt(localStorage.getItem('loginAttempts') || '0');
-            localStorage.setItem('loginAttempts', (attempts + 1).toString());
+
+        // Open Task Modal
+        function openTask(taskId) {
+            const modal = document.getElementById('taskModal');
+            const dynamicFields = document.getElementById('dynamicFields');
+            
+            // Generate dynamic fields based on MCP response
+            const fields = [
+                { label: 'Customer Name', value: 'Acme Corporation', type: 'text' },
+                { label: 'Order ID', value: 'ORD-2024-' + Math.floor(Math.random() * 10000), type: 'text' },
+                { label: 'Amount', value: '$' + (Math.random() * 10000).toFixed(2), type: 'text' },
+                { label: 'Priority', value: 'Medium', type: 'select', options: ['Low', 'Medium', 'High'] },
+                { label: 'Region', value: 'North America', type: 'text' },
+                { label: 'Product Category', value: 'Enterprise Software', type: 'text' },
+                { label: 'Contract Type', value: 'Annual', type: 'select', options: ['Monthly', 'Quarterly', 'Annual'] },
+                { label: 'Discount Applied', value: '15%', type: 'text' },
+                { label: 'Payment Terms', value: 'Net 30', type: 'text' },
+                { label: 'Delivery Date', value: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString(), type: 'date' },
+                { label: 'Account Manager', value: 'John Smith', type: 'text' },
+                { label: 'Risk Score', value: Math.floor(Math.random() * 100), type: 'number' }
+            ];
+            
+            let fieldsHtml = '';
+            fields.forEach((field, index) => {
+                fieldsHtml += `
+                    <div class="form-group">
+                        <label class="form-label">${field.label}</label>
+                        ${field.type === 'select' ? 
+                            `<select class="form-input">
+                                ${field.options.map(opt => `<option ${opt === field.value ? 'selected' : ''}>${opt}</option>`).join('')}
+                            </select>` :
+                            `<input type="${field.type}" class="form-input" value="${field.value}" ${index < 10 ? 'readonly' : ''} />`
+                        }
+                    </div>
+                `;
+            });
+            
+            dynamicFields.innerHTML = fieldsHtml;
+            modal.classList.add('active');
+            
+            // Store task ID for completion
+            modal.dataset.taskId = taskId;
         }
-        
-        function showError(message) {
-            const errorDiv = document.getElementById('error');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-            setTimeout(() => {
-                errorDiv.style.display = 'none';
-            }, 5000);
+
+        // Close Modal
+        function closeModal() {
+            const modal = document.getElementById('taskModal');
+            modal.classList.remove('active');
         }
-        
-        // Form submission
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+
+        // Handle Task Form Submission
+        document.getElementById('taskForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            if (!checkRateLimit()) return;
+            const modal = document.getElementById('taskModal');
+            const taskId = modal.dataset.taskId;
+            const decision = document.getElementById('decision').value;
             
-            const password = document.getElementById('password').value;
-            const passwordHash = await sha256(password);
+            showLoader();
+            addConsoleLog(`Processing task ${taskId} completion...`, 'info');
             
-            if (passwordHash === CORRECT_PASSWORD_HASH) {
-                // Success - store auth data
-                sessionStorage.setItem('authenticated', 'true');
-                sessionStorage.setItem('authTime', Date.now().toString());
-                sessionStorage.setItem('fingerprint', generateFingerprint());
-                localStorage.setItem('loginAttempts', '0');
+            setTimeout(() => {
+                // Update task status
+                const taskElement = document.getElementById(taskId);
+                if (taskElement) {
+                    const statusElement = taskElement.querySelector('.task-status');
+                    statusElement.className = 'task-status status-completed';
+                    statusElement.textContent = 'Completed';
+                    
+                    const button = taskElement.querySelector('button');
+                    button.disabled = true;
+                    button.textContent = 'Completed';
+                }
                 
-                // Redirect to presentation
-                window.location.href = PRESENTATION_URL;
-            } else {
-                // Failed attempt
-                incrementAttempts();
-                showError('Invalid access code. Please try again.');
-                document.getElementById('password').value = '';
-            }
+                // Complete the process
+                animateNode('node-end', 1000);
+                addConsoleLog(`✓ Task ${taskId} completed with decision: ${decision}`, 'success');
+                addConsoleLog('✓ Process instance completed successfully', 'success');
+                addConsoleLog(`  Total execution time: ${(Math.random() * 10 + 5).toFixed(2)} seconds`, 'info');
+                
+                closeModal();
+                hideLoader();
+                showToast('Task Completed', 'Process completed successfully', 'success');
+            }, 2000);
         });
-        
-        // Clear error on input focus
-        document.getElementById('password').addEventListener('focus', function() {
-            document.getElementById('error').style.display = 'none';
+
+        // Console Logger
+        function addConsoleLog(message, type = 'info') {
+            const console = document.getElementById('console');
+            const timestamp = new Date().toLocaleTimeString();
+            const logLine = document.createElement('div');
+            logLine.className = 'console-line';
+            logLine.innerHTML = `
+                <span class="console-timestamp">[${timestamp}]</span>
+                <span class="console-${type}"> ${message}</span>
+            `;
+            console.appendChild(logLine);
+            console.scrollTop = console.scrollHeight;
+        }
+
+        // Toast Notifications
+        function showToast(title, message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastMessage = document.getElementById('toastMessage');
+            const icon = toast.querySelector('.toast-icon');
+            
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            
+            if (type === 'error') {
+                icon.textContent = '✗';
+                toast.className = 'toast toast-error show';
+            } else if (type === 'warning') {
+                icon.textContent = '⚠';
+                toast.className = 'toast toast-warning show';
+            } else {
+                icon.textContent = '✓';
+                toast.className = 'toast toast-success show';
+            }
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Loader
+        function showLoader() {
+            document.getElementById('loader').classList.add('active');
+        }
+
+        function hideLoader() {
+            document.getElementById('loader').classList.remove('active');
+        }
+
+        // Scroll to modeler
+        function scrollToModeler() {
+            document.querySelector('.platform-section').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Show help
+        function showHelp() {
+            showToast('Help', 'Click "Create Hello World" to start, then Deploy and Run Demo', 'info');
+        }
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            createHelloWorld();
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         });
     </script>
 </body>
